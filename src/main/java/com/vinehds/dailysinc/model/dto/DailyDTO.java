@@ -1,7 +1,6 @@
 package com.vinehds.dailysinc.model.dto;
 
 import com.vinehds.dailysinc.model.entitie.Daily;
-import com.vinehds.dailysinc.model.entitie.Developer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class DailyDTO {
 
     private Long id;
 
-    private Developer author;
+    private DeveloperDTO author;
 
     private LocalDate date;
 
@@ -29,7 +28,7 @@ public class DailyDTO {
         Daily entity = new Daily();
 
         entity.setId(id);
-        entity.setAuthor(author);
+        entity.setAuthor(author.toEntity());
         entity.setDate(date);
         entity.setLastDayLog(lastDayLog);
         entity.setNextDayPlan(nextDayPlan);
@@ -44,7 +43,7 @@ public class DailyDTO {
         DailyDTO dto = new DailyDTO();
 
         dto.setId(entity.getId());
-        dto.setAuthor(entity.getAuthor());
+        dto.setAuthor(DeveloperDTO.fillDTO(entity.getAuthor()));
         dto.setDate(entity.getDate());
         dto.setLastDayLog(entity.getLastDayLog());
         dto.setNextDayPlan(entity.getNextDayPlan());

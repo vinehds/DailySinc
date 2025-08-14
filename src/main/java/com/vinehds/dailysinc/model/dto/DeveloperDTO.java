@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,9 +21,9 @@ public class DeveloperDTO {
 
     private String name;
 
-    private Team team;
+    private TeamDTO team;
 
-    private List<Daily> dailies;
+    private List<DailyDTO> dailies;
 
     private ResponsabilityType responsability;
 
@@ -31,9 +32,13 @@ public class DeveloperDTO {
 
         developer.setId(id);
         developer.setName(name);
-        developer.setTeam(team);
+        developer.setTeam(team.toEntity());
         developer.setResponsability(responsability);
-        developer.setDailies(dailies);
+        developer.setDailies(
+                dailies.stream()
+                .map(DailyDTO::toEntity)
+                .collect(Collectors.toList())
+        );
 
         return developer;
     }
@@ -47,9 +52,13 @@ public class DeveloperDTO {
 
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setTeam(entity.getTeam());
+        dto.setTeam(TeamDTO.fillDTO(entity.getTeam()));
         dto.setResponsability(entity.getResponsability());
-        dto.setDailies(entity.getDailies());
+        dto.setDailies(
+                entity.getDailies().stream()
+                        .map(DailyDTO::fillDTO)
+                        .collect(Collectors.toList())
+        );
 
         return dto;
     }
