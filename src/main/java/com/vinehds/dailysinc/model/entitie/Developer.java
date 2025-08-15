@@ -1,7 +1,8 @@
 package com.vinehds.dailysinc.model.entitie;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vinehds.dailysinc.model.enums.ResponsabilityType;
+import com.vinehds.dailysinc.model.enums.Department;
+import com.vinehds.dailysinc.model.enums.Responsability;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,8 @@ public class Developer {
     private List<Daily> dailies;
 
     @Column(name = "dev_responsability")
-    private ResponsabilityType responsability;
+    private Responsability responsability;
 
+    @Column(name = "dev_departament")
+    private Department department;
 }

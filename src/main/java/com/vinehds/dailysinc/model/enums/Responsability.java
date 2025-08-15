@@ -1,12 +1,12 @@
 package com.vinehds.dailysinc.model.enums;
 
-public enum ResponsabilityType {
+public enum Responsability {
 
     ADMIN(1), TECHLEAD(2), MEMBER(3);
 
     private int code;
 
-    ResponsabilityType(int code) {
+    Responsability(int code) {
         this.code = code;
     }
 
@@ -14,10 +14,10 @@ public enum ResponsabilityType {
         return code;
     }
 
-    public static ResponsabilityType valueOf(int code) {
-        for (ResponsabilityType responsabilityType : ResponsabilityType.values()) {
-            if (responsabilityType.getCode() == code) {
-                return responsabilityType;
+    public static Responsability valueOf(int code) {
+        for (Responsability responsabilities : Responsability.values()) {
+            if (responsabilities.getCode() == code) {
+                return responsabilities;
             }
         }
         throw new IllegalArgumentException("Invalid Responsibility code: " + code);

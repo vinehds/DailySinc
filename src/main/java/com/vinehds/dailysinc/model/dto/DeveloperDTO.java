@@ -1,11 +1,8 @@
 package com.vinehds.dailysinc.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.model.entitie.Developer;
-import com.vinehds.dailysinc.model.entitie.Team;
-import com.vinehds.dailysinc.model.enums.ResponsabilityType;
-import jakarta.persistence.*;
+import com.vinehds.dailysinc.model.enums.Department;
+import com.vinehds.dailysinc.model.enums.Responsability;
 import lombok.*;
 
 import java.util.List;
@@ -25,7 +22,9 @@ public class DeveloperDTO {
 
     private List<DailyDTO> dailies;
 
-    private ResponsabilityType responsability;
+    private Department department;
+
+    private Responsability responsability;
 
     public Developer toEntity() {
         Developer developer = new Developer();
@@ -39,6 +38,7 @@ public class DeveloperDTO {
                 .map(DailyDTO::toEntity)
                 .collect(Collectors.toList())
         );
+        developer.setDepartment(department);
 
         return developer;
     }
@@ -59,6 +59,7 @@ public class DeveloperDTO {
                         .map(DailyDTO::fillDTO)
                         .collect(Collectors.toList())
         );
+        dto.setDepartment(entity.getDepartment());
 
         return dto;
     }
