@@ -3,7 +3,6 @@ package com.vinehds.dailysinc.controller;
 import com.vinehds.dailysinc.model.dto.DailyDTO;
 import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.service.DailyService;
-import jakarta.servlet.ServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,47 +10,46 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dailies")
+@RequestMapping( "/dailies")
 public class DailyController {
 
     private final DailyService dailyService;
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public ResponseEntity<List<DailyDTO>> findAll() {
-        return ResponseEntity.ok().body(dailyService.getAllDailies().stream().map(DailyDTO::fillDTO)
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok()
+                .body(dailyService.getAllDailies().stream().map(DailyDTO::fromEntity).toList());
     }
 
-    @GetMapping("/getById")
-    public ResponseEntity<DailyDTO> findById(@RequestParam Long id) {
-        return ResponseEntity.ok().body(DailyDTO.fillDTO(dailyService.getDailyById(id)));
+    @GetMapping("/{id}")
+    public ResponseEntity<DailyDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(DailyDTO.fromEntity(dailyService.getDailyById(id)));
     }
 
-    @PostMapping("/insert")
-    public ResponseEntity<DailyDTO> insert(@RequestBody DailyDTO team) {
+    @PostMapping()
+    public ResponseEntity<DailyDTO> insert(@RequestBody DailyDTO daily) {
 
-        Daily teamInserted = dailyService.insertDaily(team.toEntity());
+        Daily dailyInserted = dailyService.insertDaily(daily.toEntity());
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(team.getId())
+                .buildAndExpand(dailyInserted.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(DailyDTO.fillDTO(teamInserted));
+        return ResponseEntity.created(uri).body(DailyDTO.fromEntity(dailyInserted));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<DailyDTO> update(@RequestParam Long id, @RequestBody DailyDTO obj){
-        obj = DailyDTO.fillDTO(dailyService.updateDaily(id, obj.toEntity()));
+    @PutMapping("/{id}")
+    public ResponseEntity<DailyDTO> update(@PathVariable Long id, @RequestBody DailyDTO obj){
+        obj = DailyDTO.fromEntity(dailyService.updateDaily(id, obj.toEntity()));
         return ResponseEntity.ok().body(obj);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestParam Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         dailyService.delete(id);
         return ResponseEntity.noContent().build();
     }

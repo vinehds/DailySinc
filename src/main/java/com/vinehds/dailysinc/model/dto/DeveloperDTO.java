@@ -18,9 +18,9 @@ public class DeveloperDTO {
 
     private String name;
 
-    private TeamDTO team;
+    private Long teamId;
 
-    private List<DailyDTO> dailies;
+    private List<Long> dailiesId;
 
     private Department department;
 
@@ -31,32 +31,22 @@ public class DeveloperDTO {
 
         developer.setId(id);
         developer.setName(name);
-        developer.setTeam(team.toEntity());
         developer.setResponsability(responsability);
-        developer.setDailies(
-                dailies.stream()
-                .map(DailyDTO::toEntity)
-                .collect(Collectors.toList())
-        );
         developer.setDepartment(department);
 
         return developer;
     }
 
-    public DeveloperDTO toDTO(Developer entity) {
-        return fillDTO(entity);
-    }
-
-    public static DeveloperDTO fillDTO(Developer entity) {
+    public static DeveloperDTO fromEntity(Developer entity) {
         DeveloperDTO dto = new DeveloperDTO();
 
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setTeam(TeamDTO.fillDTO(entity.getTeam()));
+        dto.setTeamId(entity.getTeam().getId());
         dto.setResponsability(entity.getResponsability());
-        dto.setDailies(
+        dto.setDailiesId(
                 entity.getDailies().stream()
-                        .map(DailyDTO::fillDTO)
+                        .map(daily -> daily.getId())
                         .collect(Collectors.toList())
         );
         dto.setDepartment(entity.getDepartment());

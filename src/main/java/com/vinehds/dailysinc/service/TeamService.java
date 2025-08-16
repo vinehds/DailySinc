@@ -1,5 +1,6 @@
 package com.vinehds.dailysinc.service;
 
+import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.model.entitie.Team;
 import com.vinehds.dailysinc.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class TeamService { //todo exceptions customized
 
     private final TeamRepository teamRepository;
+
+    private final DeveloperService developerService;
 
     public List<Team> getAllTeams() {
         try{
@@ -33,6 +36,10 @@ public class TeamService { //todo exceptions customized
         if(isExists(team.getId())) {
             throw new RuntimeException("Team already exists: " + team.getId());
         } else {
+            List<Long> ids = team.getMembers().stream()
+                    .map(Developer::getId)
+                    .toList();
+
             return teamRepository.save(team);
         }
     }
@@ -56,7 +63,7 @@ public class TeamService { //todo exceptions customized
         try {
             teamRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id.toString());
+            throw new ResourceNotFoundException();
         }
     }
 

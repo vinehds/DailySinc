@@ -17,7 +17,7 @@ public class TeamDTO {
 
     private Long id;
 
-    private List<DeveloperDTO> members;
+    private List<Long> membersId;
 
     private String description;
 
@@ -25,23 +25,17 @@ public class TeamDTO {
         Team entity = new Team();
 
         entity.setId(id);
-        entity.setMembers(members.stream().map(DeveloperDTO::toEntity)
-                .collect(Collectors.toList()));
         entity.setDescription(description);
 
         return entity;
     }
 
-    public TeamDTO toDTO(Team entity) {
-        return fillDTO(entity);
-    }
-
-    public static TeamDTO fillDTO(Team entity) {
+    public static TeamDTO fromEntity(Team entity) {
         TeamDTO dto = new TeamDTO();
 
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
-        dto.setMembers(entity.getMembers().stream().map(DeveloperDTO::fillDTO)
+        dto.setMembersId(entity.getMembers().stream().map(dev -> dev.getId())
                 .collect(Collectors.toList()));
 
         return dto;

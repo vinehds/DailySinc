@@ -19,7 +19,6 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "team")
     private List<Developer> members;
 

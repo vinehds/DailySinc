@@ -20,38 +20,38 @@ public class DeveloperController {
 
     private final DeveloperService developerService;
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public ResponseEntity<List<DeveloperDTO>> findAll() {
-        return ResponseEntity.ok().body(developerService.getAllDevelopers().stream().map(DeveloperDTO::fillDTO)
-                .collect(Collectors.toList()));
+        return ResponseEntity.ok()
+                .body(developerService.getAllDevelopers().stream().map(DeveloperDTO::fromEntity).toList());
     }
 
-    @GetMapping("/getById")
-    public ResponseEntity<DeveloperDTO> findById(@RequestParam Long id) {
-        return ResponseEntity.ok().body(DeveloperDTO.fillDTO(developerService.getDeveloperById(id)));
+    @GetMapping("/{id}")
+    public ResponseEntity<DeveloperDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(DeveloperDTO.fromEntity(developerService.getDeveloperById(id)));
     }
 
-    @PostMapping("/insert")
-    public ResponseEntity<DeveloperDTO> insert(@RequestBody DeveloperDTO team) {
+    @PostMapping()
+    public ResponseEntity<DeveloperDTO> insert(@RequestBody DeveloperDTO developer) {
 
-        Developer teamInserted = developerService.insertDeveloper(team.toEntity());
+        Developer developerInserted = developerService.insertDeveloper(developer.toEntity());
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(team.getId())
+                .buildAndExpand(developerInserted.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(DeveloperDTO.fillDTO(teamInserted));
+        return ResponseEntity.created(uri).body(DeveloperDTO.fromEntity(developerInserted));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<DeveloperDTO> update(@RequestParam Long id, @RequestBody DeveloperDTO obj){
-        obj = DeveloperDTO.fillDTO(developerService.updateDeveloper(id, obj.toEntity()));
+    @PutMapping("/{id}")
+    public ResponseEntity<DeveloperDTO> update(@PathVariable Long id, @RequestBody DeveloperDTO obj){
+        obj = DeveloperDTO.fromEntity(developerService.updateDeveloper(id, obj.toEntity()));
         return ResponseEntity.ok().body(obj);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestParam Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         developerService.delete(id);
         return ResponseEntity.noContent().build();
     }

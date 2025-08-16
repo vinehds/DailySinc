@@ -24,6 +24,7 @@ public class Developer {
     @Column(name = "dev_name")
     private String name;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dev_team", nullable = false)
     private Team team;

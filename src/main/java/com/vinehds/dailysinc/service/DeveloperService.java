@@ -56,7 +56,15 @@ public class DeveloperService {
         try {
             developerRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id.toString());
+            throw new ResourceNotFoundException();
+        }
+    }
+
+    public List<Developer> getAllById(List<Long> ids) {
+        try{
+            return developerRepository.findAllById(ids);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -70,4 +78,5 @@ public class DeveloperService {
         entity.setResponsability(obj.getResponsability());
         entity.setDepartment(obj.getDepartment());
     }
+
 }

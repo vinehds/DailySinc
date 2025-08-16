@@ -56,7 +56,7 @@ public class DailyService {
         try {
             dailyRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id.toString());
+            throw new ResourceNotFoundException();
         }
     }
 

@@ -16,7 +16,7 @@ public class DailyDTO {
 
     private Long id;
 
-    private DeveloperDTO author;
+    private Long authorId;
 
     private LocalDate date;
 
@@ -28,22 +28,17 @@ public class DailyDTO {
         Daily entity = new Daily();
 
         entity.setId(id);
-        entity.setAuthor(author.toEntity());
         entity.setDate(date);
         entity.setLastDayLog(lastDayLog);
         entity.setNextDayPlan(nextDayPlan);
         return entity;
     }
 
-    public DailyDTO toDTO(Daily entity) {
-        return fillDTO(entity);
-    }
-
-    public static DailyDTO fillDTO(Daily entity) {
+    public static DailyDTO fromEntity(Daily entity) {
         DailyDTO dto = new DailyDTO();
 
         dto.setId(entity.getId());
-        dto.setAuthor(DeveloperDTO.fillDTO(entity.getAuthor()));
+        dto.setAuthorId(entity.getAuthor().getId());
         dto.setDate(entity.getDate());
         dto.setLastDayLog(entity.getLastDayLog());
         dto.setNextDayPlan(entity.getNextDayPlan());
