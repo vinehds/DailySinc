@@ -3,9 +3,10 @@ package com.vinehds.dailysinc.service;
 import com.vinehds.dailysinc.model.dto.DeveloperDTO;
 import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.repository.DeveloperRepository;
+import com.vinehds.dailysinc.service.exception.DataBaseException;
+import com.vinehds.dailysinc.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +24,14 @@ public class DeveloperService {
         try{
             return developerRepository.findAll().stream().map(DeveloperDTO::fromEntity).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataBaseException(e.getMessage());
         }
     }
 
     public DeveloperDTO getDeveloperById(Long id) {
         Optional<Developer> dev = developerRepository.findById(id);
         return DeveloperDTO
-                .fromEntity(dev.orElseThrow(() -> new RuntimeException("Developer not found")));
+                .fromEntity(dev.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public DeveloperDTO insertDeveloper(DeveloperDTO developer) {
@@ -42,7 +43,7 @@ public class DeveloperService {
     public DeveloperDTO updateDeveloper(Long id, DeveloperDTO obj) {
         try {
             if(!isExists(id)){
-                throw new RuntimeException("Developer not found");
+                throw new ResourceNotFoundException(id);
             }
 
             Developer entity = developerRepository.getReferenceById(id);
@@ -50,7 +51,7 @@ public class DeveloperService {
 
             return DeveloperDTO.fromEntity(developerRepository.save(entity));
         }catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataBaseException(e.getMessage());
         }
     }
 
@@ -58,7 +59,7 @@ public class DeveloperService {
         try {
             developerRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(id);
         }
     }
 

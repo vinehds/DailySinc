@@ -1,11 +1,12 @@
 package com.vinehds.dailysinc.service;
 
 import com.vinehds.dailysinc.model.dto.TeamDTO;
+import com.vinehds.dailysinc.service.exception.ResourceNotFoundException;
 import com.vinehds.dailysinc.model.entitie.Team;
 import com.vinehds.dailysinc.repository.TeamRepository;
+import com.vinehds.dailysinc.service.exception.DataBaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class TeamService { //todo exceptions customized
         try{
             return teamRepository.findAll().stream().map(TeamDTO::fromEntity).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataBaseException(e.getMessage());
         }
     }
 
     public TeamDTO getTeamById(Long id) {
        Optional<Team> team = teamRepository.findById(id);
-       return TeamDTO.fromEntity(team.orElseThrow(() -> new RuntimeException("Team not found")));
+       return TeamDTO.fromEntity(team.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public TeamDTO insertTeam(TeamDTO team) {
@@ -38,7 +39,7 @@ public class TeamService { //todo exceptions customized
     public TeamDTO updateTeam(Long id, TeamDTO obj) {
         try {
             if(!isExists(id)){
-                throw new RuntimeException("Team not found");
+                throw new ResourceNotFoundException(id);
             }
 
             Team entity = teamRepository.getReferenceById(id);
@@ -46,7 +47,7 @@ public class TeamService { //todo exceptions customized
 
             return TeamDTO.fromEntity(teamRepository.save(entity));
         }catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataBaseException(e.getMessage());
         }
     }
 
@@ -54,7 +55,7 @@ public class TeamService { //todo exceptions customized
         try {
             teamRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(id);
         }
     }
 

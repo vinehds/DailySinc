@@ -3,9 +3,10 @@ package com.vinehds.dailysinc.service;
 import com.vinehds.dailysinc.model.dto.DailyDTO;
 import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.repository.DailyRepository;
+import com.vinehds.dailysinc.service.exception.DataBaseException;
+import com.vinehds.dailysinc.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +24,14 @@ public class DailyService {
         try{
             return dailyRepository.findAll().stream().map(DailyDTO::fromEntity).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DataBaseException(e.getMessage());
         }
     }
 
     public DailyDTO getDailyById(Long id) {
         Optional<Daily> daily = dailyRepository.findById(id);
         return DailyDTO
-                .fromEntity(daily.orElseThrow(() -> new RuntimeException("Daily not found")));
+                .fromEntity(daily.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public DailyDTO insertDaily(DailyDTO daily) {
@@ -43,7 +44,7 @@ public class DailyService {
         try {
 
             if(!isExists(id)){
-                throw new RuntimeException("Daily not found");
+                throw new ResourceNotFoundException(id);
             }
 
             Daily entity = dailyRepository.getReferenceById(id);
@@ -59,7 +60,7 @@ public class DailyService {
         try {
             dailyRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(id);
         }
     }
 
