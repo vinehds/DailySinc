@@ -1,7 +1,6 @@
 package com.vinehds.dailysinc.controller;
 
 import com.vinehds.dailysinc.model.dto.DailyDTO;
-import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.service.DailyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,30 +20,30 @@ public class DailyController {
     @GetMapping()
     public ResponseEntity<List<DailyDTO>> findAll() {
         return ResponseEntity.ok()
-                .body(dailyService.getAllDailies().stream().map(DailyDTO::fromEntity).toList());
+                .body(dailyService.getAllDailies());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DailyDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(DailyDTO.fromEntity(dailyService.getDailyById(id)));
+        return ResponseEntity.ok().body(dailyService.getDailyById(id));
     }
 
     @PostMapping()
     public ResponseEntity<DailyDTO> insert(@RequestBody DailyDTO daily) {
 
-        Daily dailyInserted = dailyService.insertDaily(daily.toEntity());
+        DailyDTO dailyInserted = dailyService.insertDaily(daily);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(dailyInserted.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(DailyDTO.fromEntity(dailyInserted));
+        return ResponseEntity.created(uri).body(dailyInserted);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DailyDTO> update(@PathVariable Long id, @RequestBody DailyDTO obj){
-        obj = DailyDTO.fromEntity(dailyService.updateDaily(id, obj.toEntity()));
+        obj = dailyService.updateDaily(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 

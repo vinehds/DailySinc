@@ -1,7 +1,6 @@
 package com.vinehds.dailysinc.controller;
 
 import com.vinehds.dailysinc.model.dto.TeamDTO;
-import com.vinehds.dailysinc.model.entitie.Team;
 import com.vinehds.dailysinc.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,31 +19,30 @@ public class TeamController {
 
     @GetMapping()
     public ResponseEntity<List<TeamDTO>> findAll() {
-        return ResponseEntity.ok().body(teamService.getAllTeams().stream().map(TeamDTO::fromEntity)
-                        .collect(Collectors.toList()));
+        return ResponseEntity.ok().body(teamService.getAllTeams());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(TeamDTO.fromEntity(teamService.getTeamById(id)));
+        return ResponseEntity.ok().body(teamService.getTeamById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<TeamDTO> insert(@RequestBody TeamDTO team) {
+    public ResponseEntity<TeamDTO> insert(@RequestBody TeamDTO dto) {
 
-        Team teamInserted = teamService.insertTeam(team.toEntity());
+        TeamDTO teamInserted = teamService.insertTeam(dto);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(teamInserted.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(TeamDTO.fromEntity(teamInserted));
+        return ResponseEntity.created(uri).body(teamInserted);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TeamDTO> update(@PathVariable Long id, @RequestBody TeamDTO obj){
-        obj = TeamDTO.fromEntity(teamService.updateTeam(id, obj.toEntity()));
+        obj = teamService.updateTeam(id, obj);
         return ResponseEntity.ok().body(obj);
     }
 

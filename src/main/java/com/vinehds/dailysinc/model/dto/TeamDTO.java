@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -35,8 +34,9 @@ public class TeamDTO {
 
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
-        dto.setMembersId(entity.getMembers().stream().map(dev -> dev.getId())
-                .collect(Collectors.toList()));
+        if(entity.getMembers() != null) {
+            dto.setMembersId(entity.getMembers().stream().map(dev -> dev.getId()).toList());
+        }
 
         return dto;
     }

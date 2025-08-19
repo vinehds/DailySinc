@@ -44,12 +44,12 @@ public class DeveloperDTO {
         dto.setName(entity.getName());
         dto.setTeamId(entity.getTeam().getId());
         dto.setResponsability(entity.getResponsability());
-        dto.setDailiesId(
-                entity.getDailies().stream()
-                        .map(daily -> daily.getId())
-                        .collect(Collectors.toList())
-        );
         dto.setDepartment(entity.getDepartment());
+
+        if(entity.getDailies() != null){
+            dto.setDailiesId(entity.getDailies().stream()
+                    .map(daily -> daily.getId()).toList());
+        }
 
         return dto;
     }

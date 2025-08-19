@@ -1,6 +1,6 @@
 package com.vinehds.dailysinc.service;
 
-import com.vinehds.dailysinc.model.entitie.Developer;
+import com.vinehds.dailysinc.model.dto.TeamDTO;
 import com.vinehds.dailysinc.model.entitie.Team;
 import com.vinehds.dailysinc.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,43 +17,34 @@ public class TeamService { //todo exceptions customized
 
     private final TeamRepository teamRepository;
 
-    private final DeveloperService developerService;
 
-    public List<Team> getAllTeams() {
+    public List<TeamDTO> getAllTeams() {
         try{
-            return teamRepository.findAll();
+            return teamRepository.findAll().stream().map(TeamDTO::fromEntity).toList();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public Team getTeamById(Long id) {
+    public TeamDTO getTeamById(Long id) {
        Optional<Team> team = teamRepository.findById(id);
-       return team.orElseThrow(() -> new RuntimeException("Team not found"));
+       return TeamDTO.fromEntity(team.orElseThrow(() -> new RuntimeException("Team not found")));
     }
 
-    public Team insertTeam(Team team) {
-        if(isExists(team.getId())) {
-            throw new RuntimeException("Team already exists: " + team.getId());
-        } else {
-            List<Long> ids = team.getMembers().stream()
-                    .map(Developer::getId)
-                    .toList();
-
-            return teamRepository.save(team);
-        }
+    public TeamDTO insertTeam(TeamDTO team) {
+        return TeamDTO.fromEntity(teamRepository.save(team.toEntity()));
     }
 
-    public Team updateTeam(Long id, Team obj) {
+    public TeamDTO updateTeam(Long id, TeamDTO obj) {
         try {
             if(!isExists(id)){
                 throw new RuntimeException("Team not found");
             }
 
             Team entity = teamRepository.getReferenceById(id);
-            updateData(entity, obj);
+            updateData(entity, obj.toEntity());
 
-            return teamRepository.save(entity);
+            return TeamDTO.fromEntity(teamRepository.save(entity));
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

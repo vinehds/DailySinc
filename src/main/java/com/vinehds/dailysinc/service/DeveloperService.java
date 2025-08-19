@@ -1,5 +1,6 @@
 package com.vinehds.dailysinc.service;
 
+import com.vinehds.dailysinc.model.dto.DeveloperDTO;
 import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.repository.DeveloperRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,28 +17,29 @@ public class DeveloperService {
 
     private final DeveloperRepository developerRepository;
 
-    public List<Developer> getAllDevelopers() {
+    private final TeamService teamService;
+
+    public List<DeveloperDTO> getAllDevelopers() {
         try{
-            return developerRepository.findAll();
+            return developerRepository.findAll().stream().map(DeveloperDTO::fromEntity).toList();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public Developer getDeveloperById(Long id) {
+    public DeveloperDTO getDeveloperById(Long id) {
         Optional<Developer> dev = developerRepository.findById(id);
-        return dev.orElseThrow(() -> new RuntimeException("Developer not found"));
+        return DeveloperDTO
+                .fromEntity(dev.orElseThrow(() -> new RuntimeException("Developer not found")));
     }
 
-    public Developer insertDeveloper(Developer developer) {
-        if(isExists(developer.getId())) {
-            throw new RuntimeException("Developer already exists: " + developer.getId());
-        } else {
-            return developerRepository.save(developer);
-        }
+    public DeveloperDTO insertDeveloper(DeveloperDTO developer) {
+        Developer entity = developer.toEntity();
+        entity.setTeam(teamService.getTeamById(developer.getTeamId()).toEntity());
+        return DeveloperDTO.fromEntity(developerRepository.save(entity));
     }
 
-    public Developer updateDeveloper(Long id, Developer obj) {
+    public DeveloperDTO updateDeveloper(Long id, DeveloperDTO obj) {
         try {
             if(!isExists(id)){
                 throw new RuntimeException("Developer not found");
@@ -46,7 +48,7 @@ public class DeveloperService {
             Developer entity = developerRepository.getReferenceById(id);
             updateData(entity, obj);
 
-            return developerRepository.save(entity);
+            return DeveloperDTO.fromEntity(developerRepository.save(entity));
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -60,21 +62,12 @@ public class DeveloperService {
         }
     }
 
-    public List<Developer> getAllById(List<Long> ids) {
-        try{
-            return developerRepository.findAllById(ids);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private boolean isExists(Long id) {
         return developerRepository.existsById(id);
     }
 
-    private void updateData(Developer entity, Developer obj) {
+    private void updateData(Developer entity, DeveloperDTO obj) {
         entity.setName(obj.getName());
-        entity.setTeam(obj.getTeam());
         entity.setResponsability(obj.getResponsability());
         entity.setDepartment(obj.getDepartment());
     }
