@@ -65,6 +65,7 @@ public class TeamService { //todo exceptions customized
 
     private void updateData(Team entity, Team obj) {
         entity.setDescription(obj.getDescription());
+        entity.setTeamName(obj.getTeamName());
     }
 
 }

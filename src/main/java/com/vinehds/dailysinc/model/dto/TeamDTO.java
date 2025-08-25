@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,9 @@ public class TeamDTO {
 
     private Long id;
 
-    private List<Long> membersId;
+    private String teamName;
+
+    private List<Long> membersId = new ArrayList<>();
 
     private String description;
 
@@ -25,6 +28,7 @@ public class TeamDTO {
 
         entity.setId(id);
         entity.setDescription(description);
+        entity.setTeamName(teamName);
 
         return entity;
     }
@@ -34,6 +38,8 @@ public class TeamDTO {
 
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
+        dto.setTeamName(entity.getTeamName());
+
         if(entity.getMembers() != null) {
             dto.setMembersId(entity.getMembers().stream().map(dev -> dev.getId()).toList());
         }

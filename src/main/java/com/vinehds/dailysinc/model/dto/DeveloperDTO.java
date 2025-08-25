@@ -5,6 +5,7 @@ import com.vinehds.dailysinc.model.enums.Department;
 import com.vinehds.dailysinc.model.enums.Responsability;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class DeveloperDTO {
 
     private Long teamId;
 
-    private List<Long> dailiesId;
+    private List<Long> dailiesId = new ArrayList<>();
 
     private Department department;
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,11 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "team_name")
+    private String teamName;
+
     @OneToMany(mappedBy = "team")
-    private List<Developer> members;
+    private List<Developer> members = new ArrayList<>();
 
     @Column(name = "team_description")
     private String description;

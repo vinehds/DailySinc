@@ -6,6 +6,7 @@ import com.vinehds.dailysinc.model.enums.Responsability;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Developer {
 
     @JsonIgnore
     @OneToMany(mappedBy = "author")
-    private List<Daily> dailies;
+    private List<Daily> dailies = new ArrayList<>();
 
     @Column(name = "dev_responsability")
     private Responsability responsability;
