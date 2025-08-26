@@ -29,7 +29,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Team team = new Team(null, null,"Team 1");
+        Team team = new Team(null, "Team 1", null,"Desenvolvimento Java");
         teamRepository.save(team);
 
         Developer dev = new Developer(null, "Vinicius Teste", team, null, Responsability.MEMBER,
