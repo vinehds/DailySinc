@@ -3,11 +3,13 @@ package com.vinehds.dailysinc.controller;
 import com.vinehds.dailysinc.model.dto.DailyDTO;
 import com.vinehds.dailysinc.service.DailyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,6 +24,15 @@ public class DailyController {
         return ResponseEntity.ok()
                 .body(dailyService.getAllDailies());
     }
+
+    @GetMapping("/dailies")
+    public ResponseEntity<List<DailyDTO>> findByDate(
+            @RequestParam
+            @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
+
+        return ResponseEntity.ok(dailyService.getAllDailiesByDate(date));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<DailyDTO> findById(@PathVariable Long id) {

@@ -1,5 +1,6 @@
 package com.vinehds.dailysinc.model.entitie;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,9 @@ public class Daily {
     @JoinColumn(name = "author_id", nullable = false)
     private Developer author;
 
+    private String authorName;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
 
     @Column(name = "last_day_log")

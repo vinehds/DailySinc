@@ -18,6 +18,8 @@ public class DailyDTO {
 
     private Long authorId;
 
+    private String authorName;
+
     private LocalDate date;
 
     private String lastDayLog;
@@ -39,6 +41,7 @@ public class DailyDTO {
 
         dto.setId(entity.getId());
         dto.setAuthorId(entity.getAuthor().getId());
+        dto.setAuthorName(entity.getAuthor().getName());
         dto.setDate(entity.getDate());
         dto.setLastDayLog(entity.getLastDayLog());
         dto.setNextDayPlan(entity.getNextDayPlan());

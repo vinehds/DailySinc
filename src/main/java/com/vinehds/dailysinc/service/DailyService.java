@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,13 @@ public class DailyService {
         } catch (Exception e) {
             throw new DataBaseException(e.getMessage());
         }
+    }
+
+    public List<DailyDTO> getAllDailiesByDate(LocalDate date) {
+        return dailyRepository.findByDate(date)
+                .stream()
+                .map(DailyDTO::fromEntity)
+                .toList();
     }
 
     public DailyDTO getDailyById(Long id) {
