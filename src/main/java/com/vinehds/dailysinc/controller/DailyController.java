@@ -19,19 +19,18 @@ public class DailyController {
 
     private final DailyService dailyService;
 
-    @GetMapping()
+    @GetMapping ()
     public ResponseEntity<List<DailyDTO>> findAll() {
         return ResponseEntity.ok()
                 .body(dailyService.getAllDailies());
     }
 
-    @GetMapping("/dailies")
+    @GetMapping("/byDate")
     public ResponseEntity<List<DailyDTO>> findByDate(
-            @RequestParam
-            @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
-
+            @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
         return ResponseEntity.ok(dailyService.getAllDailiesByDate(date));
     }
+
 
 
     @GetMapping("/{id}")
