@@ -33,7 +33,7 @@ public class TestConfig implements CommandLineRunner {
         teamRepository.save(team);
 
         Developer dev = new Developer(null, "Vinicius Teste", team, null, Responsability.MEMBER,
-                Department.DEV_WEB);
+                Department.WEB_DEVELOPER);
 
         developerRepository.save(dev);
 

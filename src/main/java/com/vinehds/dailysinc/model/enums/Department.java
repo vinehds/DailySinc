@@ -2,7 +2,7 @@ package com.vinehds.dailysinc.model.enums;
 
 public enum Department {
 
-    DEV_WEB(1), DEV_DESK(2), OTHER(3);
+    WEB_DEVELOPER(1), DESK_DEVELOPER(2), OTHER(3);
 
     private int code;
 

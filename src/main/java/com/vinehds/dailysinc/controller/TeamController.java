@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/teams")
-public class TeamController {
+public class TeamController {   
 
     private final TeamService teamService;
 
