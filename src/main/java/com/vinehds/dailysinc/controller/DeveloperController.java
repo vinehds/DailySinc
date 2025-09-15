@@ -2,6 +2,7 @@ package com.vinehds.dailysinc.controller;
 
 import com.vinehds.dailysinc.model.dto.DeveloperDTO;
 import com.vinehds.dailysinc.service.DeveloperService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class DeveloperController {
     }
 
     @PostMapping()
-    public ResponseEntity<DeveloperDTO> insert(@RequestBody DeveloperDTO developer) {
+    public ResponseEntity<DeveloperDTO> insert(@Valid @RequestBody DeveloperDTO developer) {
 
         DeveloperDTO developerInserted = developerService.insertDeveloper(developer);
 
@@ -41,7 +42,7 @@ public class DeveloperController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DeveloperDTO> update(@PathVariable Long id, @RequestBody DeveloperDTO obj){
+    public ResponseEntity<DeveloperDTO> update(@PathVariable Long id, @Valid @RequestBody DeveloperDTO obj){
         obj = developerService.updateDeveloper(id, obj);
         return ResponseEntity.ok().body(obj);
     }

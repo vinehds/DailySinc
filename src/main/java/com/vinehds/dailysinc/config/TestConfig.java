@@ -4,7 +4,7 @@ import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.model.entitie.Team;
 import com.vinehds.dailysinc.model.enums.Department;
-import com.vinehds.dailysinc.model.enums.Responsability;
+import com.vinehds.dailysinc.model.enums.UserRole;
 import com.vinehds.dailysinc.repository.DailyRepository;
 import com.vinehds.dailysinc.repository.DeveloperRepository;
 import com.vinehds.dailysinc.repository.TeamRepository;
@@ -32,19 +32,30 @@ public class TestConfig implements CommandLineRunner {
         Team team = new Team(null, "Team 1", null,"Desenvolvimento Java");
         teamRepository.save(team);
 
-        Developer dev = new Developer(null, "Vinicius Teste", team, null, Responsability.MEMBER,
-                Department.WEB_DEVELOPER);
 
-        developerRepository.save(dev);
+        Developer dev2 = new Developer(
+                null, "Vinicius", "12345", team, null, UserRole.ADMIN,
+                Department.WEB_DEVELOPER, "vini@teste.com");
 
-        Daily daily = new Daily();
+        developerRepository.save(dev2);
+
+        /*Daily daily = new Daily();
         daily.setId(null);
-        daily.setAuthor(dev);
+        daily.setAuthor(dev2);
         daily.setDate(LocalDate.now());
         daily.setLastDayLog("Fiz x");
         daily.setNextDayPlan("Farei y");
 
         dailyRepository.save(daily);
 
+        Daily daily2 = new Daily();
+        daily.setId(null);
+        daily.setAuthor(dev2);
+        daily.setDate(LocalDate.now());
+        daily.setLastDayLog("Fiz x");
+        daily.setNextDayPlan("Farei y");
+
+        dailyRepository.save(daily);
+        dailyRepository.save(daily2);*/
     }
 }

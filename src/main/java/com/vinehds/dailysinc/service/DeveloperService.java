@@ -36,7 +36,10 @@ public class DeveloperService {
 
     public DeveloperDTO insertDeveloper(DeveloperDTO developer) {
         Developer entity = developer.toEntity();
-        entity.setTeam(teamService.getTeamById(developer.getTeamId()).toEntity());
+
+        if(developer.getTeamId() != null){
+            entity.setTeam(teamService.getTeamById(developer.getTeamId()).toEntity());
+        }
         return DeveloperDTO.fromEntity(developerRepository.save(entity));
     }
 
@@ -69,7 +72,7 @@ public class DeveloperService {
 
     private void updateData(Developer entity, DeveloperDTO obj) {
         entity.setName(obj.getName());
-        entity.setResponsability(obj.getResponsability());
+        entity.setUserRole(obj.getUserRole());
         entity.setDepartment(obj.getDepartment());
     }
 

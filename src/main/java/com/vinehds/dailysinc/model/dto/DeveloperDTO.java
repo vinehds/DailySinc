@@ -1,13 +1,14 @@
 package com.vinehds.dailysinc.model.dto;
 
+import com.vinehds.dailysinc.model.entitie.Daily;
 import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.model.enums.Department;
-import com.vinehds.dailysinc.model.enums.Responsability;
+import com.vinehds.dailysinc.model.enums.UserRole;
+import com.vinehds.dailysinc.validation.annotation.BusinessEmail;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,19 +22,23 @@ public class DeveloperDTO {
 
     private Long teamId;
 
+    @BusinessEmail
+    private String email;
+
     private List<Long> dailiesId = new ArrayList<>();
 
     private Department department;
 
-    private Responsability responsability;
+    private UserRole UserRole;
 
     public Developer toEntity() {
         Developer developer = new Developer();
 
         developer.setId(id);
         developer.setName(name);
-        developer.setResponsability(responsability);
+        developer.setUserRole(UserRole);
         developer.setDepartment(department);
+        developer.setEmail(email);
 
         return developer;
     }
@@ -43,13 +48,18 @@ public class DeveloperDTO {
 
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setTeamId(entity.getTeam().getId());
-        dto.setResponsability(entity.getResponsability());
+
+        if(entity.getTeam() != null) {
+            dto.setTeamId(entity.getTeam().getId());
+        }
+
+        dto.setUserRole(entity.getUserRole());
         dto.setDepartment(entity.getDepartment());
+        dto.setEmail(entity.getEmail());
 
         if(entity.getDailies() != null){
             dto.setDailiesId(entity.getDailies().stream()
-                    .map(daily -> daily.getId()).toList());
+                    .map(Daily::getId).toList());
         }
 
         return dto;
