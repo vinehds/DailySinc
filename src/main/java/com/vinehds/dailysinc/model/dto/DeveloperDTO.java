@@ -31,6 +31,8 @@ public class DeveloperDTO {
 
     private UserRole UserRole;
 
+    private String password;
+
     public Developer toEntity() {
         Developer developer = new Developer();
 
@@ -39,6 +41,7 @@ public class DeveloperDTO {
         developer.setUserRole(UserRole);
         developer.setDepartment(department);
         developer.setEmail(email);
+        developer.setPassword(password);
 
         return developer;
     }
@@ -56,6 +59,7 @@ public class DeveloperDTO {
         dto.setUserRole(entity.getUserRole());
         dto.setDepartment(entity.getDepartment());
         dto.setEmail(entity.getEmail());
+        dto.setPassword(entity.getPassword());
 
         if(entity.getDailies() != null){
             dto.setDailiesId(entity.getDailies().stream()

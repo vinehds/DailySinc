@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Configuration
 @Profile("dev")
@@ -33,29 +35,26 @@ public class TestConfig implements CommandLineRunner {
         teamRepository.save(team);
 
 
-        Developer dev2 = new Developer(
-                null, "Vinicius", "12345", team, null, UserRole.ADMIN,
+        Developer dev = new Developer(
+                null, "Vinicius", new BCryptPasswordEncoder().encode("111111"), team, null, UserRole.ADMIN,
                 Department.WEB_DEVELOPER, "vini@teste.com");
 
-        developerRepository.save(dev2);
+        var test = developerRepository.save(dev);
 
-        /*Daily daily = new Daily();
+        Daily daily = new Daily();
         daily.setId(null);
-        daily.setAuthor(dev2);
+        daily.setAuthor(dev);
         daily.setDate(LocalDate.now());
         daily.setLastDayLog("Fiz x");
         daily.setNextDayPlan("Farei y");
 
-        dailyRepository.save(daily);
-
-        Daily daily2 = new Daily();
+        /*Daily daily2 = new Daily();
         daily.setId(null);
-        daily.setAuthor(dev2);
+        daily.setAuthor(dev);
         daily.setDate(LocalDate.now());
         daily.setLastDayLog("Fiz x");
-        daily.setNextDayPlan("Farei y");
+        daily.setNextDayPlan("Farei y");*/
 
-        dailyRepository.save(daily);
-        dailyRepository.save(daily2);*/
+        dailyRepository.saveAll(Arrays.asList(daily));
     }
 }

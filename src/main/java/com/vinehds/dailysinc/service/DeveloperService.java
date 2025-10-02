@@ -7,6 +7,7 @@ import com.vinehds.dailysinc.service.exception.DataBaseException;
 import com.vinehds.dailysinc.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class DeveloperService {
 
     public DeveloperDTO insertDeveloper(DeveloperDTO developer) {
         Developer entity = developer.toEntity();
+        entity.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
 
         if(developer.getTeamId() != null){
             entity.setTeam(teamService.getTeamById(developer.getTeamId()).toEntity());
@@ -71,9 +73,15 @@ public class DeveloperService {
     }
 
     private void updateData(Developer entity, DeveloperDTO obj) {
+
+        if(obj.getTeamId() != null){
+            entity.setTeam(teamService.getTeamById(obj.getTeamId()).toEntity());
+        }
+
         entity.setName(obj.getName());
         entity.setUserRole(obj.getUserRole());
         entity.setDepartment(obj.getDepartment());
     }
+
 
 }

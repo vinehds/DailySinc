@@ -30,9 +30,11 @@ public class Daily {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
 
+    @Lob
     @Column(name = "last_day_log")
     private String lastDayLog;
 
+    @Lob
     @Column(name = "next_day_plan")
     private String nextDayPlan;
 

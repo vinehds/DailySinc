@@ -3,6 +3,7 @@ package com.vinehds.dailysinc.controller;
 import com.vinehds.dailysinc.infra.security.TokenService;
 import com.vinehds.dailysinc.model.dto.auth.AuthenticationDTO;
 import com.vinehds.dailysinc.model.dto.auth.LoginResponseDTO;
+import com.vinehds.dailysinc.model.dto.auth.MeDTO;
 import com.vinehds.dailysinc.model.dto.auth.RegisterDTO;
 import com.vinehds.dailysinc.model.entitie.Developer;
 import com.vinehds.dailysinc.repository.DeveloperRepository;
@@ -11,11 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -50,4 +50,11 @@ public class AuthenticationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<MeDTO> me(@AuthenticationPrincipal Developer developer) {
+        return ResponseEntity.ok(MeDTO.fromDeveloper(developer));
+    }
+
+
 }
